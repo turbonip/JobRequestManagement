@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/main}">
+<head>
+</head>
+<body>
+	<div  layout:fragment="content" ng-controller="DashboardController as dashboardController">
+		<div class="page-heading mb-n" >
+			<h1>Dashboard</h1>
+			<div class="options">
+				<div class="btn-toolbar">
+					<a href="#" class="btn btn-default" data-toggle="dropdown">Settings</a>
+				</div>
+			</div>
+		</div>
+		<div class="page-tabs">
+			{{dashboardController.test}}
+		</div>
+	</div>
+	<div layout:fragment="footerScript">
+		<script type="text/javascript" src="app/components/dashboard/MainController.js"></script>
+	</div>
+</body>
+</html>
