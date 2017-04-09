@@ -1,0 +1,6 @@
+/* Add here all your css styles (customizations) */
+
+.header > .container 
+{
+	margin-bottom: 0 !important;
+}

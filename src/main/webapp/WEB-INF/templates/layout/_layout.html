@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head>
+<title>Job Management</title>
+
+<!-- Meta -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Manage Job Requested">
+<meta name="author" content="Nipon.s">
+
+<!-- Favicon -->
+<link rel="shortcut icon" href="assets/img/favicon.ico">
+
+<!-- Web Fonts -->
+<link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
+
+<!-- CSS Global Compulsory -->
+<link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<!-- CSS Header and Footer -->
+<link rel="stylesheet" href="assets/css/headers/header-default.css">
+<link rel="stylesheet" href="assets/css/footers/footer-v4.css">
+
+<!-- CSS Implementing Plugins -->
+<link rel="stylesheet" href="assets/plugins/animate.css">
+<link rel="stylesheet" href="assets/plugins/line-icons/line-icons.css">
+<link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="assets/plugins/glyphicons-pro/glyphicons_halflings/web/html_css/css/halflings.css">
+<link rel="stylesheet" href="assets/plugins/owl-carousel/owl-carousel/owl.carousel.css">
+<link rel="stylesheet" href="assets/plugins/sky-forms-pro/skyforms/css/sky-forms.css">
+<link rel="stylesheet" href="assets/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css">
+<!--[if lt IE 9]><link rel="stylesheet" href="assets/plugins/sky-forms-pro/skyforms/css/sky-forms-ie8.css"><![endif]-->
+
+<!-- CSS Page Style -->
+<link rel="stylesheet" href="assets/css/pages/page_search.css">
+
+<!-- CSS Theme -->
+<link rel="stylesheet" href="assets/css/theme-skins/dark.css">
+
+<!-- CSS Customization -->
+<link rel="stylesheet" href="assets/css/custom.css">
+</head>
+
+<body class="dark boxed-layout container">
+
+	<div class="wrapper">
+		<!--=== Header ===-->
+		<div th:replace="fragments/header::header"></div>
+		<!--=== End Header ===-->
+
+		<!--=== Breadcrumbs ===-->
+		<!-- <div th:replace="fragments/breadcrumb::breadcrumb"></div> -->
+		<!--/breadcrumbs-->
+		<!--=== End Breadcrumbs ===-->
+
+		<!--=== Content Part ===-->
+		<div class="container content">
+
+			<div class="row">
+				<!-- Begin Sidebar Menu -->
+				<div class="col-md-3">
+					<ul th:replace="fragments/nav :: nav"></ul>
+				</div>
+				<!-- End Sidebar Menu -->
+
+				<!-- Begin Content -->
+				<div class="col-md-9" layout:fragment="content"></div>
+				<!-- End Content -->
+
+			</div>
+			
+		</div>
+		<!--=== Container Part ===-->
+
+		<!--=== Footer Version 4 ===-->
+		<div th:replace="fragments/footer :: footer"></div>
+		<!--=== End Footer Version 4 ===-->
+	</div>
+	<!--/End Wrapepr-->
+
+	<!-- JS Global Compulsory -->
+	<script type="text/javascript" src="assets/plugins/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/jquery/jquery-migrate.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+	<!-- JS Implementing Plugins -->
+	<script type="text/javascript" src="assets/plugins/back-to-top.js"></script>
+	<script type="text/javascript" src="assets/plugins/smoothScroll.js"></script>
+	<script type="text/javascript" src="assets/plugins/jquery.parallax.js"></script>
+	<script type="text/javascript" src="assets/plugins/counter/waypoints.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/counter/jquery.counterup.min.js"></script>
+	<script type="text/javascript" src="assets/plugins/owl-carousel/owl-carousel/owl.carousel.js"></script>
+
+	<!-- Angular JS -->
+	<script type="text/javascript" src="assets/js/plugins/angular.min.js"></script>
+	<script type="text/javascript" src="app/app.module.js"></script>
+
+	<!-- JS Customization -->
+	<script type="text/javascript" src="assets/js/custom.js"></script>
+	<!-- JS Page Level -->
+	<script type="text/javascript" src="assets/js/app.js"></script>
+	<script type="text/javascript" src="assets/js/plugins/owl-carousel.js"></script>
+	<script type="text/javascript">
+    jQuery(document).ready(function() {
+        App.init();
+        App.initCounter();
+        App.initParallaxBg();
+        OwlCarousel.initOwlCarousel();            
+        });
+</script>
+	<!--[if lt IE 9]>
+    <script src="assets/plugins/respond.js"></script>
+    <script src="assets/plugins/html5shiv.js"></script>    
+<![endif]-->
+
+	<div layout:fragment="footerScript"></div>
+</body>
+</html>

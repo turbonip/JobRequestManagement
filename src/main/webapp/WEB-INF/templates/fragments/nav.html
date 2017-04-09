@@ -1,34 +1,20 @@
-<nav th:fragment="navBar" role="navigation" class="widget-body navbar-fixed-top clearfix navbar-bunting" style="top: 56px;background: #252f3d;">
-	<ul class="acc-menu">
-		<li class="nav-separator" data-localize="nav_overview">Overview</li>
-		<li class="hasChild">
-				<a href="javascript:;">
-					<span class="icon"><i class="ion-android-home"></i></span>
-					<span class="text" data-localize="nav_dashboard">Dashboard</span>
-				</a>
-				<ul class="acc-menu">
-					<li><a href="./"><span class="text">Dashboard 1</span></a></li>
-					<li><a href="index-small.html"><span class="text">Dashboard 2</span></a></li>
-					<li><a href="index-horizontal.html"><span class="text">Dashboard 3</span></a></li>
-				</ul>
-		</li>
-		<li class="hasChild">
-			<a href="javascript:;">
-				<span class="icon"><i class="ion-android-mail"></i></span>
-				<span class="text" data-localize="nav_email">Email</span>
-			</a>
-			<ul class="acc-menu">
-				<li><a href="app-inbox.html"><span class="text" data-localize="nav_email_inbox">Inbox</span></a></li>
-				<li><a href="app-inbox-read.html"><span class="text" data-localize="nav_email_inbox_read">Inbox Read</span></a></li>
-				<li><a href="app-inbox-compose.html"><span class="text" data-localize="nav_email_inbox_compose">Inbox Compose</span></a></li>
-			</ul>
-		</li>
-		<li><a href="app-tasks.html"><span class="icon"><i class="ion-android-done-all"></i></span><span class="text" data-localize="nav_projects">Projects</span></a></li>
-		<li><a href="todo.html"><span class="icon"><i class="ion-android-checkbox"></i></span><span class="text" data-localize="nav_to_do_list">To-do-list</span></a></li>
-		<li><a href="app-notes.html"><span class="icon"><i class="ion-android-create"></i></span><span class="text" data-localize="nav_notes">Notes</span></a></li>
-		<li><a href="customizer.html"><span class="icon"><i class="ion-paintbucket"></i></span><span class="text" data-localize="nav_customizer">Customizer</span></a></li>
-		<li class="nav-separator" data-localize="nav_separator_layouts">Layouts</li>
-		<li><a href="layout-grids.html"><span class="icon"><i class="ion-grid"></i></span><span class="text" data-localize="nav_scaffolding">Scaffolding</span></a></li>
-		
-	</ul>
-</nav>
+<ul th:fragment="nav" class="list-group sidebar-nav-v1" id="sidebar-nav">
+	<!-- Typography -->
+	<li class="list-group-item list-toggle"><a data-toggle="collapse" data-parent="#sidebar-nav" href="#collapse-typography">Typography</a>
+		<ul id="collapse-typography" class="collapse">
+			<li><a href="shortcode_typo_general.html"><i class="fa fa-sort-alpha-asc"></i> General Typography</a></li>
+			<li><span class="badge badge-u">New</span> <a href="shortcode_typo_headings.html"><i class="fa fa-magic"></i> Heading Options</a></li>
+			<li><span class="badge badge-u">New</span> <a href="shortcode_typo_dividers.html"><i class="fa fa-ellipsis-h"></i> Dividers</a></li>
+			<li><a href="shortcode_typo_blockquote.html"><i class="fa fa-quote-left"></i> Blockquote Blocks</a></li>
+			<li><span class="badge badge-u">New</span> <a href="shortcode_typo_boxshadows.html"><i class="fa fa-asterisk"></i> Box Shadows</a></li>
+			<li><a href="shortcode_typo_testimonials.html"><i class="fa fa-comments"></i> Testimonials</a></li>
+			<li><a href="shortcode_typo_tagline_boxes.html"><i class="fa fa-tasks"></i> Tagline Boxes</a></li>
+			<li><a href="shortcode_typo_grid.html"><i class="fa fa-align-justify"></i> Grid Layout</a></li>
+		</ul></li>
+	<!-- End Typography -->
+
+	<!-- Thumbails -->
+	<li class="list-group-item"><a href="shortcode_thumbnails.html">Thumbnails</a></li>
+	<!-- End Thumbails -->
+	
+</ul>

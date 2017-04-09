@@ -28,9 +28,18 @@ public class HomeController {
 	// @Secured("ROLE_USER")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
+		
 		model.addAttribute("thymeleaf", "Test thymeleaf");
 		
-		 Customer cus = customerRepository.findByFirstName("ME");
+		 //Customer cus = customerRepository.findByFirstName("ME");
+		
+		return "dashboard/dashboard";
+	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String testt(Model model) {
+		
+		 //Customer cus = customerRepository.findByFirstName("ME");
 		
 		return "dashboard/dashboard";
 	}

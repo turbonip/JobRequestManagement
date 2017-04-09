@@ -12,6 +12,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.IndexColumn;
 import org.springframework.security.core.context.SecurityContextHolder;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +28,7 @@ public class BaseEntity {
 	private Long id;
 
 	@Column(name = "created_by")
-	private Long createBy;
+	private String createBy;
 	
 	@Column(name = "created_at")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -37,7 +39,7 @@ public class BaseEntity {
 	private Date updateAt;
 
 	@Column(name = "updated_by")
-	private Long updateBy;
+	private String updateBy;
 
 	@PrePersist
 	protected void onCreate() {
@@ -52,12 +54,12 @@ public class BaseEntity {
 		updateBy = checkCurrentUpdateBy();
 	}
 
-	protected Long checkCurrentUpdateBy() {
+	protected String checkCurrentUpdateBy() {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String principal = SecurityContextHolder.getContext().getAuthentication().getName();
 			if (principal != null && !"anonymousUser".equalsIgnoreCase(principal)) {
 				User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-				return currentUser.getId();
+				return currentUser.getUsername();
 			}
 		}
 		return null;
