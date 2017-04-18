@@ -36,8 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf()
-				.csrfTokenRepository(csrfTokenRepository());
+		http.csrf().disable();
+				//.csrfTokenRepository(csrfTokenRepository());
 
 		http.authorizeRequests().antMatchers("/assets/**").permitAll()
 				// .antMatchers("/temp").permitAll()
@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// .antMatchers("/dba/**").access("hasRole('ROLE_ADMIN') or
 				// hasRole('ROLE_DBA')")
 				.and().formLogin().loginPage("/login").and()
-				.exceptionHandling().accessDeniedPage("/dashboard");
+				.exceptionHandling().accessDeniedPage("/login");
 
 	}
 

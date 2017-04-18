@@ -6,25 +6,29 @@ var Datepicker = function () {
         initDatepicker: function () {
 	        // Regular datepicker
 	        $('#date').datepicker({
-	            dateFormat: 'dd.mm.yy',
+	            dateFormat: 'dd/mm/yyyy',
 	            prevText: '<i class="fa fa-angle-left"></i>',
 	            nextText: '<i class="fa fa-angle-right"></i>'
 	        });
 	        
 	        // Date range
 	        $('#start').datepicker({
-	            dateFormat: 'dd.mm.yy',
+	            dateFormat: 'dd/mm/yy',
 	            prevText: '<i class="fa fa-angle-left"></i>',
 	            nextText: '<i class="fa fa-angle-right"></i>',
+	            altField: "#startAlt",
+	            altFormat: "yymmdd",
 	            onSelect: function( selectedDate )
 	            {
 	                $('#finish').datepicker('option', 'minDate', selectedDate);
 	            }
 	        });
 	        $('#finish').datepicker({
-	            dateFormat: 'dd.mm.yy',
+	            dateFormat: 'dd/mm/yy',
 	            prevText: '<i class="fa fa-angle-left"></i>',
 	            nextText: '<i class="fa fa-angle-right"></i>',
+	            altField: "#finishAlt",
+	            altFormat: "yymmdd",
 	            onSelect: function( selectedDate )
 	            {
 	                $('#start').datepicker('option', 'maxDate', selectedDate);
@@ -57,6 +61,7 @@ var Datepicker = function () {
 	                $('#inline-start').datepicker('option', 'maxDate', selectedDate);
 	            }
 	        });
+	        
         }
 
     };

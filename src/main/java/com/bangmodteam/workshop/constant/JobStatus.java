@@ -1,11 +1,11 @@
 package com.bangmodteam.workshop.constant;
 
 public enum JobStatus {
-	
+
+	UNDIFIEND("U"),
 	OPEN("O"),
 	CLOSE("C"),
-	PROCESS("P"),
-	UNKNOWN("U");
+	PROCESS("P");
 	
 	private String value;
 

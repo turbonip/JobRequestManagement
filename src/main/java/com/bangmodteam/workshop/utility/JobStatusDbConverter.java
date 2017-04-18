@@ -4,7 +4,6 @@ import javax.persistence.AttributeConverter;
 import com.bangmodteam.workshop.constant.JobStatus;
 import com.bangmodteam.workshop.constant.TicketStatus;
 
-
 public class JobStatusDbConverter implements AttributeConverter<JobStatus, String> {
 
 	@Override
@@ -17,7 +16,7 @@ public class JobStatusDbConverter implements AttributeConverter<JobStatus, Strin
 	@Override
 	public JobStatus convertToEntityAttribute(String dbData) {
 		
-		JobStatus status = JobStatus.UNKNOWN;
+		JobStatus status = JobStatus.UNDIFIEND;
 		
 		if (dbData != null && !dbData.trim().isEmpty()) {
 

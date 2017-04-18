@@ -12,8 +12,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Index;
-import org.hibernate.annotations.IndexColumn;
 import org.springframework.security.core.context.SecurityContextHolder;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,7 +56,7 @@ public class BaseEntity {
 		if (SecurityContextHolder.getContext().getAuthentication() != null) {
 			String principal = SecurityContextHolder.getContext().getAuthentication().getName();
 			if (principal != null && !"anonymousUser".equalsIgnoreCase(principal)) {
-				User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+				org.springframework.security.core.userdetails.User currentUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				return currentUser.getUsername();
 			}
 		}

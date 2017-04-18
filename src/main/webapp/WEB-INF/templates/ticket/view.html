@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/_layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="TicketFormController as vm">
+		<form id="sky-form" class="sky-form" th:object=${dataDTO} novalidate>
+			<header>Ticket</header>
+			<fieldset>
+				<div class="row">
+					<section class="col col-2 col-md-offset-8">
+						<label class="label">Job ID</label> <label class="input"><input type="text" class="text-center" name="jobId" id="jobId" th:value="*{jobId}" readonly></label>
+					</section>
+					<section class="col col-2">
+						<label class="label">Ticket ID</label> <label class="input"><input type="text" class="text-center" th:value="|*{ticketId}-*{ticketSequence}|" readonly> <input type="hidden" name="ticketId" id="ticketId" th:value="*{ticketId}"></label>
+					</section>
+				</div>
+				<th:block th:fragment="ticketHeader">
+					<div class="row">
+						<section class="col col-6">
+							<label class="label">Open Date</label> <label class="input"><input type="text" th:value="*{jobOpenDate}" readonly></label>
+						</section>
+						<section class="col col-6">
+							<label class="label">Open By</label> <label class="input"><input type="text" th:value="*{jobOpenBy}" readonly></label>
+						</section>
+					</div>
+					<div class="row">
+						<section class="col col-6">
+							<label class="label">Location</label> <label class="input"><input type="text" th:value="*{jobLocationName}" readonly></label>
+						</section>
+						<section class="col col-6">
+							<label class="label">Production Line</label> <label class="input"><input type="text" th:value="*{productLineName}" readonly></label>
+						</section>
+					</div>
+					<diV class="row">
+						<section class="col col-6">
+							<label class="label">Problem Category</label> <label class="input"><input type="text" th:value="*{promblemCatName}" readonly></label>
+						</section>
+						<section class="col col-6">
+							<label class="label">Device</label> <label class="input"><input type="text" th:value="*{deviceInfoName}" readonly></label>
+						</section>
+					</div>
+					<div class="row">
+						<section class="col col-sm-12">
+							<label class="label">Description</label> <label class="textarea textarea-resizable"> <textarea rows="3" th:text="*{jobDescription}" readonly></textarea>
+							</label>
+						</section>
+					</div>
+				</th:block>
+			</fieldset>
+			<fieldset>
+				<div class="row">
+					<section class="col col-4">
+						<label class="label">Assigned Date</label> <label class="input"> <input type="text" th:value="*{assignAt}" readonly>
+						</label>
+					</section>
+					<section class="col col-4">
+						<label class="label">Assigned By</label> <label class="input"> <input type="text" th:value="*{assignBy}" readonly>
+						</label>
+					</section>
+					<section class="col col-4">
+						<label class="label">Assigned To</label> <label class="input"> <input type="text" th:value="*{assignTo}" readonly>
+						</label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Take Date</label> <label class="input"> <input type="text" th:value="*{takeAt}" readonly>
+						</label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Finish Date</label> <label class="input"> <input type="text" th:value="*{finishAt}" readonly>
+						</label>
+					</section>
+				</div>
+				<div class="row" th:unless="*{#strings.equalsIgnoreCase('O', ticketStatus.value)}">
+					<section class="col col-sm-12">
+						<label class="label">Resolve Description</label> <label class="textarea textarea-resizable"> <textarea rows="3" name="ticketResovle" id="ticketResovle" th:text="*{ticketResovle}"
+								th:readonly="*{not #strings.equalsIgnoreCase('P', ticketStatus.value) and not #authorization.expression('hasRole(''ROLE_STAFF'')')}"></textarea>
+						</label>
+					</section>
+				</div>
+				<div class="row" th:if="*{#strings.equalsIgnoreCase('C', ticketStatus.value)}">
+					<section class="col col-6">
+						<label class="label">Verify Date</label> <label class="input"> <input type="text" th:value="*{tickVerifyAt}" readonly>
+						</label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Verify By</label> <label class="input"> <input type="text" th:value="*{ticketVerifyBy}" readonly>
+						</label>
+					</section>
+				</div>
+			</fieldset>
+			<footer class="text-right">
+				<th:block sec:authorize="hasRole('ROLE_STAFF')">
+					<button th:if="*{#strings.equalsIgnoreCase('O', ticketStatus.value)}" type="button" class="btn-u btn-u-green" ng-click="vm.takeTicket()">Take Job</button>
+					<button th:if="*{#strings.equalsIgnoreCase('P', ticketStatus.value)}" type="button" class="btn-u btn-u-green" ng-click="vm.finishTicket()">Mark Finish</button>
+				</th:block>
+				<th:block sec:authorize="hasRole('ROLE_LEADER')">
+					<button th:if="*{#strings.equalsIgnoreCase('F', ticketStatus.value)}" type="button" class="btn-u btn-u-green" ng-click="vm.newTicket()">New Ticket</button>
+					<button th:if="*{#strings.equalsIgnoreCase('F', ticketStatus.value)}" type="button" class="btn-u btn-u-green" ng-click="vm.closeJob()">Close Job</button>
+				</th:block>
+				<button type="button" class="btn-u btn-u-default" ng-click="vm.close()">Cancel</button>
+			</footer>
+		</form>
+	</div>
+
+
+	<th:block layout:fragment="footerScript">
+		<script type="text/javascript" th:src="@{/app/components/ticket/ticket.form.controller.js}"></script>
+	</th:block>
+
+</body>
+</html>

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,9 +30,6 @@ public class JobApp extends BaseEntity {
 	private ProblemCategory problemCategory;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	private ProblemSubCategory problemSubCategory;
-
-	@ManyToOne(fetch = FetchType.LAZY)
 	private DeviceInfo deviceInfo;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -41,10 +40,19 @@ public class JobApp extends BaseEntity {
 
 	private String problemDescription;
 
+	//@Enumerated(EnumType.STRING)
 	@Convert(converter = JobStatusDbConverter.class)
 	private JobStatus jobStatus;
 
 	private String resolveResult;
+
+	@Column(name = "opened_at")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date openAt;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "opened_by")
+	private User openBy;
 
 	@Column(name = "closed_at")
 	@Temporal(TemporalType.TIMESTAMP)

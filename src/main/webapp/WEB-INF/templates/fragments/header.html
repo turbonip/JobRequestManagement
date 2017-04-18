@@ -1,21 +1,27 @@
-<div class="header" th:fragment="header">
-	<div class="container">
-		<!-- Logo -->
-		<a class="logo" href="index.html"> <img src="assets/img/logo.png" alt="Logo">
-		</a>
-		<!-- End Logo -->
+<div xmlns:th="http://www.thymeleaf.org">
+	<div class="header" th:fragment="header">
+		<div class="container">
+			<!-- Logo -->
+			<a class="logo" th:href="@{/}"> <img src="/assets/img/logo.png" alt="Logo">
+			</a>
+			<!-- End Logo -->
 
-		<!-- Topbar -->
-		<div class="topbar">
-			<ul class="loginbar pull-right">
-				<li class="hoverSelector"><a><i class="fa fa-plug"></i>&nbsp;UserName</a>
-					<ul class="languages hoverSelectorBlock">
-						<li><a href="#" th:href="@{/logout}">Log out</a></li>
-					</ul></li>
-			</ul>
+			<!-- Topbar-nav -->
+			<div class="topbar">
+				<ul class="loginbar pull-right">
+					<li class="hoverSelector"><a><i class="fa fa-plug"></i>&nbsp;
+							<th:block th:if="${#strings.equalsIgnoreCase('anonymousUser',#authentication.principal)} != true">
+								[[${#authentication.principal.username}]]
+							</th:block>
+						</a>
+						<ul class="languages hoverSelectorBlock">
+							<li><a href="#" th:href="@{/logout}">Log out</a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<!-- End Topbar-nav -->
+
 		</div>
-		<!-- End Topbar -->
-
+		<!--/end container-->
 	</div>
-	<!--/end container-->
 </div>

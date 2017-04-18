@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/_layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="JobDetailController as vm">
+		<form id="sky-form" class="sky-form" th:object=${dataDTO}>
+			<header>Job [[${#strings.capitalize(formMode)}]]</header>
+			<fieldset>
+				<div class="row" th:style="${#strings.equalsIgnoreCase('create', formMode)}? 'display:none':_ " >
+					<section class="col col-4 col-md-offset-8">
+						<label class="label">Job ID</label> <label class="input"><input type="text" name="jobId" th:text="*{jobId}" readonly></label>
+					</section>
+				</div>
+				<div class="row" th:if="${#strings.equalsIgnoreCase('edit', formMode)}">
+					<section class=" colcol-6">
+						<label class="label">Open Date</label> <label class="input"><input type="text" th:text="*{jobOpenDate}" readonly></label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Open By</label> <label class="input"><input type="text" th:text="*{jobOpenBy}" readonly></label>
+					</section>
+				</div>
+				<div class="row" th:if="${#strings.equalsIgnoreCase('edit', formMode)}">
+					<section class="col col-6">
+						<label class="label">Close Date</label> <label class="input"><input type="text" th:text="*{jobCloseDate}" readonly></label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Close By</label> <label class="input"><input type="text" th:text="*{jobCloseBy}" readonly></label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Location</label> <label class="select"> <select id="jobLocation" name="jobLocation" ng-init="locationIdSelected = '0'" ng-model="locationIdSelected" ng-change="vm.onLocationChange(locationIdSelected)">
+								<option value="0" >กรุณาเลือก</option>
+								<option th:each="item : ${locationList}" th:value="${item.id}" th:text="${item.name}"></option>
+						</select><i></i>
+						</label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Production Line</label> <label class="select"> <select id="jobProductLine" name="jobProductLine">
+								<option value="0">กรุณาเลือก</option>
+								<option ng-repeat="item in vm.productionLineList" value="{{item.id}}" >{{item.lineName}}</option>
+						</select><i></i>
+						</label>
+					</section>
+				</div>
+				<diV class="row">
+					<section class="col col-6">
+						<label class="label">Problem Category</label> <label class="select"> <select id="problemCat" name="problemCat">
+								<option value="0">กรุณาเลือก</option>
+								<option th:each="item : ${problemList}" th:value="${item.id}" th:text="${item.name}"></option>
+						</select><i></i>
+						</label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Device</label> <label class="select"> <select id="deviceInfo" name="deviceInfo">
+								<option th:each="item : ${deviceList}" th:value="${item.id}" th:text="${item.name}"></option>
+						</select><i></i>
+						</label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-sm-12">
+						<label class="label">Description</label> <label class="textarea textarea-resizable"> <textarea rows="3" name="jobDescription" th:text="*{jobDescription}" ></textarea>
+						</label>
+					</section>
+				</div>
+				<div class="row" th:style="${#strings.equalsIgnoreCase('create', formMode)}? 'display:none':_ " >
+					<section class="col col-6">
+						<label class="label">Job Status</label> <label class="select"> <select id="jobStatus" name="jobStatus">
+								<option value="0">กรุณาเลือก</option>
+								<option th:each="item : ${jobStatusList}" th:value="${item.value}" th:text="${item}" ></option>
+						</select><i></i>
+						</label>
+					</section>
+				</div>
+				<div class="row" th:style="${#strings.equalsIgnoreCase('create', formMode)}? 'display:none':_ " >
+					<section class="col col-sm-12">
+						<label class="label">Resolve</label> <label class="textarea textarea-resizable"> <textarea rows="3" name="jobResolve" th:text="*{jobResolve}" ></textarea>
+						</label>
+					</section>
+				</div>
+				<section th:if="${#strings.equalsIgnoreCase('edit', formMode)}">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="accordion-toggle" data-toggle="collapse" href="#collapse-Tickets"> Show Tickets </a>
+							</h4>
+						</div>
+						<div id="collapse-Tickets" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<div class="row">
+									<table id="ticketList" class="table table-bordered">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>ID</th>
+												<th>Status</th>
+												<th>Assign Date</th>
+												<th>Assign By</th>
+												<th>Assign To</th>
+												<th>Take Date</th>
+												<th>Finish Date</th>
+												<th>Resolve</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td colspan="9" th:if="*{#lists.isEmpty(tickets)}">
+													<div class="alert alert-warning fade in text-center">
+														<strong>No Tickets</strong>
+													</div>
+												</td>
+											</tr>
+											<tr th:unless="*{#lists.isEmpty(tickets)}" th:each="row,iterStat : *{tickets}">
+												<td th:text="${iterStat.index} + 1"></td>
+												<td>[[${row.ticketId]]</td>
+												<td>[[${row.ticketStatus]]</td>
+												<td>[[${row.assignAt]]</td>
+												<td>[[${row.assignBy]]</td>
+												<td>[[${row.assignTo]]</td>
+												<td>[[${row.takeAt]]</td>
+												<td>[[${row.finishAt]]</td>
+												<td>[[${row.ticketResovle]]</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+				</section>
+			</fieldset>
+			<footer class="text-right">
+				<button type="button" class="btn-u btn-u-green" ng-click="vm.save()">Save</button>
+				<button type="button" class="btn-u btn-u-default" ng-click="vm.close()">Cancel</button>
+				<input type="hidden" class="hidden" id="formMode" name="formMode" th:value="${formMode}" />
+			</footer>
+		</form>
+	</div>
+
+
+	<th:block layout:fragment="footerScript">
+		<script type="text/javascript" th:src="@{/app/components/job/job.detail.controller.js}"></script>
+	</th:block>
+
+</body>
+</html>

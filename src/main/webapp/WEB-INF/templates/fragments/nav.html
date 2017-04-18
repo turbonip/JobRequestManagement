@@ -1,20 +1,19 @@
-<ul th:fragment="nav" class="list-group sidebar-nav-v1" id="sidebar-nav">
-	<!-- Typography -->
-	<li class="list-group-item list-toggle"><a data-toggle="collapse" data-parent="#sidebar-nav" href="#collapse-typography">Typography</a>
-		<ul id="collapse-typography" class="collapse">
-			<li><a href="shortcode_typo_general.html"><i class="fa fa-sort-alpha-asc"></i> General Typography</a></li>
-			<li><span class="badge badge-u">New</span> <a href="shortcode_typo_headings.html"><i class="fa fa-magic"></i> Heading Options</a></li>
-			<li><span class="badge badge-u">New</span> <a href="shortcode_typo_dividers.html"><i class="fa fa-ellipsis-h"></i> Dividers</a></li>
-			<li><a href="shortcode_typo_blockquote.html"><i class="fa fa-quote-left"></i> Blockquote Blocks</a></li>
-			<li><span class="badge badge-u">New</span> <a href="shortcode_typo_boxshadows.html"><i class="fa fa-asterisk"></i> Box Shadows</a></li>
-			<li><a href="shortcode_typo_testimonials.html"><i class="fa fa-comments"></i> Testimonials</a></li>
-			<li><a href="shortcode_typo_tagline_boxes.html"><i class="fa fa-tasks"></i> Tagline Boxes</a></li>
-			<li><a href="shortcode_typo_grid.html"><i class="fa fa-align-justify"></i> Grid Layout</a></li>
-		</ul></li>
-	<!-- End Typography -->
+<div xmlns:th="http://www.thymeleaf.org">
+	<ul th:fragment="nav" class="list-group sidebar-nav-v1" id="sidebar-nav">
+		<!-- Job -->
+		<li class="list-group-item list-toggle"><a data-toggle="collapse" data-parent="#sidebar-nav" href="#collapse-jobmenu">Job Management</a>
+			<ul id="collapse-jobmenu" class="collapse">
+				<li><a th:href="@{/job/}"><i class="icon-magnifier"></i> Search Job</a></li>
+				<li><a th:href="@{/job/create/}"><i class="icon-notebook"></i> Create Job</a></li>
+			</ul></li>
+		<!-- End Job -->
 
-	<!-- Thumbails -->
-	<li class="list-group-item"><a href="shortcode_thumbnails.html">Thumbnails</a></li>
-	<!-- End Thumbails -->
-	
-</ul>
+		<!-- Ticket -->
+		<li class="list-group-item list-toggle"><a data-toggle="collapse" data-parent="#sidebar-nav" href="#collapse-ticketmenu">Ticket</a>
+			<ul id="collapse-ticketmenu" class="collapse">
+				<li><a th:href="@{/ticket/list}"><i class="icon-list"></i> Ticket List</a></li>
+			</ul></li>
+		<!-- End Ticket-->
+
+	</ul>
+</div>

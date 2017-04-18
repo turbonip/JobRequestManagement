@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,16 +29,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 		try {
+
 			User user = userRepository.findByUsername(username);
 			Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
 
 			if (user != null && user.getRole() != null) {
 
-				grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+				grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName().toUpperCase()));
+				grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
 			}
 
-			return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+			org.springframework.security.core.userdetails.User userDetail = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+
+			return userDetail;
 
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());

@@ -26,9 +26,6 @@ public class ProblemCategory extends BaseEntity {
 	@Column(name ="problem_cat_name")
 	private String name;
 
-	@OneToMany(mappedBy = "problemCategory", fetch = FetchType.LAZY)
-	private List<ProblemSubCategory> problemSubCategories;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinTable(name = "position_problemcat", joinColumns = @JoinColumn(name = "problem_cat_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
 	private Position positionResponse;

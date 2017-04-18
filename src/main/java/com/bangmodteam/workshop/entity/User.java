@@ -20,13 +20,13 @@ import lombok.Setter;
 @Getter
 public class User extends BaseEntity {
 
-	private String usercode;
 	private String username;
 	private String password;
 
-	private String firstName;
-	private String lastName;
-
+	//private String firstName;
+	//private String lastName;
+	//private String name;
+	
 	@Transient
 	private String passwordConfirm;
 

@@ -35,6 +35,8 @@ public class Ticket extends BaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date assignAt;
 
+	private String assignRemark;
+
 	@Convert(converter = TicketStatusDbConverter.class)
 	private TicketStatus ticketStatus;
 
@@ -51,13 +53,5 @@ public class Ticket extends BaseEntity {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date verifyAt;
-
-	@PrePersist
-	protected void onCreate() {
-		super.onCreate();
-
-		// TODO: find sequence number for ticketSequence
-
-	}
 
 }

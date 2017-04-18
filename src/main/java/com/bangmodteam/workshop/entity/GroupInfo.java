@@ -24,7 +24,7 @@ public class GroupInfo extends BaseEntity {
 	@JoinColumn(name = "leader_id")
 	private User leader;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "groupInfo", fetch = FetchType.LAZY)
 	private List<User> userMembers;
 
 	@OneToMany(mappedBy = "groupInfo", fetch = FetchType.LAZY)

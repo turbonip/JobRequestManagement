@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 
-	angular.module('PayrollApp').controller('DashboardController',
+	angular.module('JobMngApp').controller('DashboardController',
 			 ['$log','$scope', DashboardController]);
 
 	function DashboardController($log, $scope) {

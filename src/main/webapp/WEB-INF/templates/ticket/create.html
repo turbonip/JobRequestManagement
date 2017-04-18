@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/_layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="TicketFormController as vm">
+		<form id="sky-form" class="sky-form" th:object=${dataDTO} novalidate>
+			<header>Ticket</header>
+			<fieldset>
+				<div class="row">
+					<section class="col col-2 col-md-offset-10">
+						<label class="label">Job ID</label> <label class="input"><input type="text" class="text-center" name="jobId" id="jobId" th:value="*{jobId}" readonly></label>
+					</section>
+				</div>
+				<div th:replace="ticket/view::ticketHeader"></div>
+			</fieldset>
+			<fieldset>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Assign To</label> <label class="select"> <select id="assignTo" name="assignTo">
+								<option value="0">กรุณาเลือก</option>
+								<option th:each="item : ${userList}" th:value="${item.userId}">[[${item.username}]]</option>
+								<optgroup label="พนักงานตำแหน่งอื่น">
+									<option th:each="item : ${userOtherList}" th:value="${item.userId}">[[${item.username}]]</option>
+								</optgroup>
+						</select><i></i>
+						</label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-sm-12">
+						<label class="label">Remark</label> <label class="textarea textarea-resizable"> <textarea rows="3" id="assignRemark" name="assignRemark"></textarea>
+						</label>
+					</section>
+				</div>
+			</fieldset>
+			<footer class="text-right">
+				<button type="button" class="btn-u btn-u-green" ng-click="vm.create()">Create</button>
+				<button type="button" class="btn-u btn-u-default" ng-click="vm.close()">Close</button>
+			</footer>
+		</form>
+	</div>
+
+
+	<th:block layout:fragment="footerScript">
+		<script type="text/javascript" th:src="@{/app/components/ticket/ticket.form.controller.js}"></script>
+	</th:block>
+
+</body>
+</html>

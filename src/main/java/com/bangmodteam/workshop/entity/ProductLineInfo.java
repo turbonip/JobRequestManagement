@@ -3,10 +3,10 @@ package com.bangmodteam.workshop.entity;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,8 +18,9 @@ public class ProductLineInfo extends BaseEntity {
 
 	private String lineName;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinTable(name = "productline_location", joinColumns = @JoinColumn(name = "productline_id"), inverseJoinColumns = @JoinColumn(name = "location_id"))
+	@JsonIgnore()
+	@ManyToOne(fetch = FetchType.LAZY )
+	@JoinColumn(name = "location_id")
 	private LocationInfo locationInfo;
 
 }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/_layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="JobListController as vm">
+		<form id="sky-form" class="sky-form" novalidate>
+			<header>Job Search</header>
+			<fieldset>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Job ID</label> <label class="input"><input type="text" id="jobId" name="jobId"></label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Problem Category</label> <label class="select"> <select id="problemCat" name="problemCat">
+								<option value="0">ไม่ระบุ</option>
+								<option th:each="item : ${problemList}" th:value="${item.id}" th:text="${item.name}"></option>
+						</select><i></i>
+						</label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-md-12">
+						<label class="label">Job Date</label>
+						<div class="row">
+							<section class="col col-6">
+								<label class="input"> <i class="icon-append fa fa-calendar"></i> <input type="text" id="start" placeholder="วันที่เริ่มต้น" />
+								</label> <input type="hidden" name="jobDateBegin" id="startAlt" />
+							</section>
+							<section class="col col-6">
+								<label class="input"> <i class="icon-append fa fa-calendar"></i> <input type="text" id="finish" placeholder="วันที่สิ้นสุด">
+								</label> <input type="hidden" name="jobDateEnd" id="finishAlt" />
+							</section>
+						</div>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Location</label> <label class="select"> <select id="jobLocation" name="jobLocation">
+								<option value="0">ไม่ระบุ</option>
+								<option th:each="item : ${locationList}" th:value="${item.id}" th:text="${item.name}"></option>
+						</select><i></i>
+						</label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Status</label> <label class="select"> <select id="jobStatus" name="jobStatus">
+								<option th:each="item : ${jobStatusList}" th:value="${item.value}" th:text="${item}"></option>
+						</select><i></i>
+						</label>
+					</section>
+				</div>
+			</fieldset>
+			<footer class="text-center">
+				<button type="button" class="btn-u btn-u-blue" ng-click="vm.search()">
+					<i class="icon-eyeglasses"></i> Search
+				</button>
+				<button type="button" class="btn-u btn-u-green" ng-click="vm.create()">
+					<i class="icon-plus"></i> Create
+				</button>
+			</footer>
+		</form>
+
+		<table id="searchResult" class="table table-bordered">
+			<thead>
+				<tr>
+					<th class="text-center">#</th>
+					<th class="text-center">ID</th>
+					<th class="text-center">Date</th>
+					<th class="text-center">Location</th>
+					<th class="text-center">Problem Category</th>
+					<th class="text-center">Description</th>
+					<th class="text-center">Status</th>
+					<th class="text-center">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr id="trNoResult" ng-show="vm.joblist.length == 0">
+					<td colspan="8" >
+						<div class="alert alert-warning fade in text-center">
+							<strong>No Matched</strong>
+						</div>
+					</td>
+				</tr>
+				<tr ng-repeat="row in vm.joblist">
+					<td class="text-center">{{$index + 1}}</td>
+					<td class="text-center">{{row.jobId}}</td>
+					<td class="text-center">{{row.jobDate}}</td>
+					<td class="text-center">{{row.jobLocationName}}</td>
+					<td>{{row.promblemCatName}}</td>
+					<td>{{row.jobDescription}}</td>
+					<td class="text-center">{{row.jobStatusName}}</td>
+					<td class="text-center"><a style="cursor: pointer;" ng-click="vm.view(row.jobId)">view</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<th:block layout:fragment="footerScript">
+		<script type="text/javascript" th:src="@{/app/components/job/job.list.controller.js}"></script>
+	</th:block>
+
+</body>
+</html>

@@ -1,11 +1,12 @@
 package com.bangmodteam.workshop.constant;
 
 public enum TicketStatus {
-
+	
+	UNKNOWN("U"),
 	OPEN("O"),
 	PROCESS("P"),
-	CLOSE("C"),
-	UNKNOWN("U");
+	FINISH("F"),
+	CLOSE("C");
 	
 	
 	private String value;

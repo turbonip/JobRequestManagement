@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/_layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="JobDetailController as vm">
+		<form id="sky-form" class="sky-form" th:object=${dataDTO}>
+			<header>Job Detail</header>
+			<fieldset>
+				<div class="row">
+					<section class="col col-2 col-md-offset-10">
+						<label class="label">Job ID</label> <label class="input"><input type="text" class="text-center" th:value="*{jobId}" readonly></label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Open Date</label> <label class="input"><input type="text" th:value="*{jobOpenDate}" readonly></label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Open By</label> <label class="input"><input type="text" th:value="*{jobOpenBy}" readonly></label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Close Date</label> <label class="input"><input type="text" th:value="*{jobCloseDate}" readonly></label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Close By</label> <label class="input"><input type="text" th:value="*{jobCloseBy}" readonly></label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Location</label> <label class="input"><input type="text" th:value="*{jobLocationName}" readonly></label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Production Line</label> <label class="input"><input type="text" th:value="*{productLineName}" readonly></label>
+					</section>
+				</div>
+				<diV class="row">
+					<section class="col col-6">
+						<label class="label">Problem Category</label> <label class="input"><input type="text" th:value="*{promblemCatName}" readonly></label>
+					</section>
+					<section class="col col-6">
+						<label class="label">Device</label> <label class="input"><input type="text" th:value="*{deviceInfoName}" readonly></label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-sm-12">
+						<label class="label">Description</label> <label class="textarea textarea-resizable"> <textarea rows="3" th:text="*{jobDescription}" readonly></textarea>
+						</label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label" style="display: inline-block;">Job Status</label> <span th:class="|badge badge-*{jobStatus.value == 'O'? 'blue' : jobStatus.value == 'P'? 'yellow' : jobStatus.value == 'C'? 'green' : 'default'} rounded|">[[*{jobStatus}]]</span>
+						<label class="checkbox" sec:authorize="hasRole('ROLE_LEADER')" th:style="*{#strings.equalsIgnoreCase('C', jobStatus.value)}? 'display:none':_ "> <input type="checkbox" name="jobIsClose" ng-init="jobCloseSelected=false" ng-model="jobCloseSelected"><i></i>Close Job
+						</label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-sm-12">
+						<label class="label">Resolve</label> <label class="textarea textarea-resizable"> <textarea rows="3" th:text="*{jobResolve}" ng-readonly="!jobCloseSelected"></textarea>
+						</label>
+					</section>
+				</div>
+				<section sec:authorize="hasAnyRole({'ROLE_LEADER','ROLE_STAFF'})">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="accordion-toggle" data-toggle="collapse" href="#collapse-Tickets"> Show Tickets </a>
+							</h4>
+						</div>
+						<div id="collapse-Tickets" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<div class="text-right" style="margin-bottom: 5px;" sec:authorize="hasRole('ROLE_LEADER')">
+									<button class="btn btn-success btn-sm" th:ng-click="|vm.createTicket(*{jobId})|">
+										<i class="icon-plus"></i>&nbsp;Create Ticket
+									</button>
+								</div>
+								<table id="ticketList" class="table table-bordered">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>ID</th>
+											<th>Status</th>
+											<th>Assign Date</th>
+											<th>Assign By</th>
+											<th>Assign To</th>
+											<th>Take Date</th>
+											<th>Finish Date</th>
+											<th>Resolve</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td colspan="9" th:if="*{#lists.isEmpty(tickets)}">
+												<div class="alert alert-warning fade in text-center">
+													<strong>No Tickets</strong>
+												</div>
+											</td>
+										</tr>
+										<tr th:unless="*{#lists.isEmpty(tickets)}" th:each="row,iterStat : *{tickets}">
+											<td th:text="${iterStat.index} + 1"></td>
+											<td>[[${row.ticketId}]]</td>
+											<td>[[${row.ticketStatus}]]</td>
+											<td>[[${row.assignAt}]]</td>
+											<td>[[${row.assignBy}]]</td>
+											<td>[[${row.assignTo}]]</td>
+											<td>[[${row.takeAt}]]</td>
+											<td>[[${row.finishAt}]]</td>
+											<td>[[${row.ticketResovle}]]</td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+						</div>
+				</section>
+			</fieldset>
+			<footer class="text-right">
+				<button type="button" class="btn-u btn-u-green" ng-show="jobCloseSelected" ng-click="vm.closeJob()">Save</button>
+				<button type="button" class="btn-u btn-u-orange" ng-click="vm.close()">Close</button>
+			</footer>
+		</form>
+	</div>
+
+
+	<th:block layout:fragment="footerScript">
+		<script type="text/javascript" th:src="@{/app/components/job/job.detail.controller.js}"></script>
+	</th:block>
+
+</body>
+</html>
