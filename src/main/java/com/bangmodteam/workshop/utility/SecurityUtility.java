@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.User;
 
 public class SecurityUtility {
 
-	public static String getCurrentUserName() {
+	public static User getCurrentUser() {
 
 		User currentUser = null;
 
@@ -22,8 +22,23 @@ public class SecurityUtility {
 			System.out.println("getCurrentUser --> " + e.getMessage());
 		}
 
-		return currentUser.getUsername();
+		return currentUser;
 
 	}
-	
+
+	public static String getCurrentUserName() {
+
+		return getCurrentUser().getUsername();
+
+	}
+
+	public static Boolean checkAuthorizeByRoleName(String roleName) {
+		
+		return getCurrentUser().getAuthorities().stream().anyMatch(a -> {
+				System.out.println(a.getAuthority());
+				return a.getAuthority().equalsIgnoreCase(roleName);
+			});
+
+	}
+
 }

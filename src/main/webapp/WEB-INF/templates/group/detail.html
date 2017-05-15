@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/_layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="JobDetailController as vm">
+		<form id="sky-form" class="sky-form" th:object=${dataDTO}>
+			<header>Job Detail</header>
+			<fieldset>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Group Name</label> <label class="input"><input type="text" th:value="*{groupName}" readonly></label> <input type="hidden" id="groupId" name="groupName" th:value="*{groupId}">
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Leader</label> <label class="input"><input type="text" th:value="*{leaderName}" readonly></label>
+					</section>
+				</div>
+				<section>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								Members
+							</h4>
+						</div>
+						<div id="collapse-Tickets" class="panel-collapse collapse in">
+							<div class="panel-body">
+								<div class="text-right" style="margin-bottom: 5px;" >
+									<button class="btn btn-success btn-sm" th:ng-click="|vm.addUser(*{groupId})|" >
+										<i class="icon-plus"></i>&nbsp;Add Member
+									</button>
+								</div>
+								<table id="userList" class="table table-bordered">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Position</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td colspan="4" th:if="*{#lists.isEmpty(users)}">
+												<div class="alert alert-warning fade in text-center">
+													<strong>No Users</strong>
+												</div>
+											</td>
+										</tr>
+										<tr th:unless="*{#lists.isEmpty(users)}" th:each="row,iterStat : *{users}">
+											<td th:text="${iterStat.index} + 1"></td>
+											<td>[[${row.fullName}]]</td>
+											<td>[[${row.positionName}]]</td>
+											<td class="text-center"><a style="cursor: pointer;" th:ng-click="|vm.viewTicket(${row.userId})|">delete</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+				</section>
+			</fieldset>
+			<footer class="text-right">
+				<button type="button" class="btn-u btn-u-orange" ng-click="vm.close()">Close</button>
+			</footer>
+		</form>
+	</div>
+
+	<th:block layout:fragment="footerScript">
+		<script type="text/javascript" th:src="@{/app/components/job/job.detail.controller.js}"></script>
+	</th:block>
+
+</body>
+</html>

@@ -9,6 +9,15 @@
 
 		var vm = this;
 		vm.productionLineList = {};
+		
+		/*Initialize*/
+		(function(){
+			
+			$(document).ready(function(){
+				
+			});
+			
+		})();
 
 		vm.onLocationChange = function(locationIdSelected) {
 
@@ -55,7 +64,7 @@
 		};
 
 		vm.close = function() {
-			$window.location.href = '/job/';
+			$window.history.back();
 		};
 
 		vm.closeJob = function() {
@@ -65,7 +74,7 @@
 				jobResolve : $("[name='jobResolve']").val()
 			};
 
-			$http.post('/job/close/', dataSave).then(function(response) {
+			$http.post('/job/closeJob/', dataSend).then(function(response) {
 
 				if (response.status == 200) {
 					$window.location.href = '/job/view/' + $("[name='jobId']").val();
@@ -78,10 +87,38 @@
 			});
 
 		};
+		
+		vm.openCreateTicket = function(jobId) {
+			
+			$("#creatTicketModal").modal("show");
+			
+		} ;
 
-		vm.createTicket = function(jobId) {
+		vm.createTicket = function() {
 
-			$window.location.href = "/ticket/create?jobid=" + jobId;
+			//$window.location.href = "/ticket/create?jobid=" + jobId;
+
+			let dataSave = {
+				jobId : $("[name='jobId']").val(),
+				assignToId : $("[name='assignTo']").val(),
+				assignRemark : $("[name='assignRemark']").val()
+			};
+
+			$http.post("/ticket/create", dataSave).then(function(response) {
+
+				if (response.status == 200) {
+					$window.location.href = '/job/view/' + $("[name='jobId']").val();
+				} else {
+					alert(response.statusText + '\n' + response.data.message);
+				}
+
+			}, function(response) {
+				alert('Server Unavailable');
+			});
+		};
+		
+		vm.viewTicket = function(ticketId) {
+			$window.location.href = "/ticket/" + ticketId + "/view";
 		};
 
 	}

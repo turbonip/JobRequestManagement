@@ -10,6 +10,12 @@
 		var vm = this;
 		vm.joblist = [];
 
+		!function() {			
+			$(document).ready(function(){
+				$("#search").click();
+			});			
+		}();
+		
 		vm.search = function() {
 
 			let searchData = {
@@ -40,6 +46,10 @@
 
 		vm.edit = function(id) {
 			$log.debug("edit" + id);
+		};
+
+		vm.toggleFilter = function() {
+			$("#filterContent").collapse('toggle');
 		};
 
 	}

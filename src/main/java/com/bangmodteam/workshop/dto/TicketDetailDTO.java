@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import com.bangmodteam.workshop.constant.TicketStatus;
 import com.bangmodteam.workshop.entity.JobApp;
 import com.bangmodteam.workshop.entity.Ticket;
+import com.bangmodteam.workshop.utility.DateTimeUtility;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,20 +49,18 @@ public class TicketDetailDTO extends JobDetailDTO {
 
 		super(ticket.getJobApp(), false);
 
-		SimpleDateFormat sdfr = new SimpleDateFormat("dd/MMM/yyyy");
-
 		this.ticketId = ticket.getId();
 
 		this.ticketSequence = ticket.getTicketSequence();
 
 		if (ticket.getAssignAt() != null)
-			this.assignAt = sdfr.format(ticket.getAssignAt());
+			this.assignAt = DateTimeUtility.DateToString(ticket.getAssignAt(), "dd/MM/yyyy");
 
 		if (ticket.getAssignBy() != null)
-			this.assignBy = ticket.getAssignBy().getUsername();
+			this.assignBy = ticket.getAssignBy().getName();
 
 		if (ticket.getAssignTo() != null)
-			this.assignTo = ticket.getAssignTo().getUsername();
+			this.assignTo = ticket.getAssignTo().getName();
 
 		this.assignRemark = ticket.getAssignRemark();
 
@@ -72,16 +71,16 @@ public class TicketDetailDTO extends JobDetailDTO {
 		this.ticketResovle = ticket.getResovleResult();
 
 		if (ticket.getTakeAt() != null)
-			this.takeAt = sdfr.format(ticket.getTakeAt());
+			this.takeAt = DateTimeUtility.DateToString(ticket.getTakeAt(), "dd/MM/yyyy");
 
 		if (ticket.getFinishAt() != null)
-			this.finishAt = sdfr.format(ticket.getFinishAt());
+			this.finishAt = DateTimeUtility.DateToString(ticket.getFinishAt(), "dd/MM/yyyy");
 
 		if (ticket.getVerifyBy() != null)
-			this.ticketVerifyBy = ticket.getVerifyBy().getUsername();
+			this.ticketVerifyBy = ticket.getVerifyBy().getName();
 
 		if (ticket.getVerifyAt() != null)
-			this.tickVerifyAt = sdfr.format(ticket.getVerifyAt());
+			this.tickVerifyAt = DateTimeUtility.DateToString(ticket.getVerifyAt(), "dd/MM/yyyy");
 
 	}
 

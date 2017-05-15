@@ -3,17 +3,26 @@
 
 	angular.module('JobMngApp').controller('TicketListController', TicketListController);
 
-	TicketListController.$inject('$scope', '$log', '$window', '$location', '$http');
+	TicketListController.$inject = ['$scope', '$log', '$window', '$location', '$http'];
 
 	function TicketListController($scope, $log, $window, $location, $http) {
 
 		var vm = this;
-
 		vm.ticketlist = [];
+		
+		!function() {			
+			$(document).ready(function(){
+				
+				$("#start").val($("#start").val());
+				$("#finish").val($("#finish").val());
+				
+				$("#searchData").click();
+			});			
+		}();
 
 		vm.search = function() {
 
-			let dateSend = {
+			var dataSend = {
 				ticketId : $("[name='ticketId']").val(),
 				jobId : $("[name='jobId']").val(),
 				assignAtStart : $("[name='assignDateBegin']").val(),
@@ -36,15 +45,15 @@
 		};
 
 		vm.viewTicket = function(ticketId) {
-			$log.debug(ticketId);
+			$window.location = "/ticket/" + ticketId + "/view";
 		};
 
 		vm.viewJob = function(jobId) {
-			$log.debug(jobId);
+			$window.location = "/job/view/" + jobId;
 		};
 
 		vm.takeTicket = function(ticketId) {
-			$log.debug(ticketId);
+			$window.location = "/ticket/" + ticketId + "/view";
 		};
 
 		vm.finishTicket = function(ticketId) {
@@ -54,6 +63,10 @@
 		vm.verifyTicket = function(ticketId) {
 			$log.debug(ticketId);
 		};
+		
+		vm.toggleFilter = function() {
+			$("#filterContent").collapse('toggle');
+		}
 
 	}
 

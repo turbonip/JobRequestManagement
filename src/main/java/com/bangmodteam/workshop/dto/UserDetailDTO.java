@@ -16,6 +16,9 @@ public class UserDetailDTO {
 	private Long userId;
 	private String username;
 	private String positionName;
+	
+	private String firstname;
+	private String lastname;
 
 	public UserDetailDTO(User user) {
 		
@@ -23,8 +26,15 @@ public class UserDetailDTO {
 			this.userId = user.getId();
 			this.username = user.getUsername();
 			this.positionName = user.getPosition().getName();
+			
+			this.firstname = user.getFirstName();
+			this.lastname = user.getLastName();
 		}
 
+	}
+	
+	public String getName() {
+		return this.firstname + " " + this.lastname;
 	}
 
 }

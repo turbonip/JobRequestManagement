@@ -65,6 +65,15 @@
 					</section>
 				</div>
 				<div class="row">
+					<section class="col col-sm-12">
+						<label class="label">Remark</label> <label class="textarea textarea-resizable"> 
+						<textarea rows="3" name="ticketResovle" th:text="*{assignRemark}" readonly ></textarea>
+						</label>
+					</section>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div class="row">
 					<section class="col col-6">
 						<label class="label">Take Date</label> <label class="input"> <input type="text" th:value="*{takeAt}" readonly>
 						</label>

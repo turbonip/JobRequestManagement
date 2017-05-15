@@ -63,7 +63,8 @@
 }
 
 .sky-form a {
-  color: inherit;
+  /*color: inherit;*/
+  color: #2da5da;
 }
 
 .sky-form a.btn-u {

@@ -1,18 +1,16 @@
 <div xmlns:th="http://www.thymeleaf.org">
 	<ul th:fragment="nav" class="list-group sidebar-nav-v1" id="sidebar-nav">
 		<!-- Job -->
-		<li sec:authorize="hasAnyRole({'ROLE_LEADER','ROLE_MONITOR'})" class="list-group-item active"><a data-parent="#sidebar-nav" href="javascript:void(0)" >Job Management</a>
-			<ul id="collapse-jobmenu">
+		<li sec:authorize="hasAnyRole({'ROLE_LEADER','ROLE_MONITOR'})" class="list-group-item list-toggle"><a data-toggle="collapse" data-parent="#sidebar-nav" href="#collapse-jobmenu">Job Management</a>
+			<ul id="collapse-jobmenu" class="collapse">
 				<li><a th:href="@{/job/}"><i class="icon-magnifier"></i> รายการใบงาน</a></li>
 				<li sec:authorize="hasRole('ROLE_MONITOR')" ><a th:href="@{/job/create/}"><i class="icon-notebook"></i> สร้างใบงานใหม่</a></li>
-			</ul>
-		</li>
+			</ul></li>
 		<!-- End Job -->
-		<hr class="devider devider-dashed">
 		<!-- Ticket -->
-		<li sec:authorize="hasAnyRole({'ROLE_LEADER','ROLE_STAFF'})" class="list-group-item active">
-		<a data-parent="#sidebar-nav" href="javascript:void(0)">Ticket</a>
-			<ul id="collapse-ticketmenu">
+		<li sec:authorize="hasAnyRole({'ROLE_LEADER','ROLE_STAFF'})" th:class="'list-group-item list-toggle' + ${#authorization.expression('hasRole(''ROLE_STAFF'')')? ' active': ''}">
+		<a data-toggle="collapse" data-parent="#sidebar-nav" href="#collapse-ticketmenu">Ticket</a>
+			<ul id="collapse-ticketmenu" th:class="'collapse' + ${#authorization.expression('hasRole(''ROLE_STAFF'')')? ' in': ''}">
 				<li><a th:href="@{/ticket/list/O}"><i class="icon-list"></i> รายการใบงานย่อยที่เปิดใหม่</a></li>
 				<li><a th:href="@{/ticket/list/P}"><i class="icon-list"></i> รายการใบงานย่อยที่กำลังดำเนินงาน</a></li>
 				<li><a th:href="@{/ticket/list/F}"><i class="icon-list"></i> รายการใบงานย่อยรอการตรวจสอบ</a></li>

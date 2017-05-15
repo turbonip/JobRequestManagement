@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.bangmodteam.workshop.constant.JobStatus;
 import com.bangmodteam.workshop.entity.JobApp;
+import com.bangmodteam.workshop.utility.DateTimeUtility;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,22 +50,21 @@ public class JobDetailDTO {
 
 	public JobDetailDTO(JobApp jobapp, boolean includeTickets) {
 
-		SimpleDateFormat sdfr = new SimpleDateFormat("dd/MM/yyyy");
 		this.tickets = new ArrayList<TicketDetailDTO>();
 
 		if (jobapp != null) {
 
 			this.jobId = jobapp.getId();
 
-			this.jobOpenDate = sdfr.format(jobapp.getOpenAt());
+			this.jobOpenDate = DateTimeUtility.DateToString(jobapp.getOpenAt(), "dd/MM/yyyy");
 
-			this.jobOpenBy = jobapp.getOpenBy().getUsername();
+			this.jobOpenBy = jobapp.getOpenBy().getName();
 
 			if ((jobapp.getCloseAt() != null))
-				this.jobCloseDate = sdfr.format(jobapp.getCloseAt());
+				this.jobCloseDate = DateTimeUtility.DateToString(jobapp.getCloseAt(), "dd/MM/yyyy");
 
 			if (jobapp.getCloseBy() != null)
-				this.jobCloseBy = jobapp.getCloseBy().getUsername();
+				this.jobCloseBy = jobapp.getCloseBy().getName();
 
 			this.promblemCatName = jobapp.getProblemCategory().getName();
 

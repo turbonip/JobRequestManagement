@@ -34,6 +34,10 @@ public class TicketStatusDbConverter implements AttributeConverter<TicketStatus,
 				status = TicketStatus.CLOSE;
 				break;
 
+			case "F":
+				status = TicketStatus.FINISH;
+				break;
+				
 			default:
 				break;
 

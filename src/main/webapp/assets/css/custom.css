@@ -4,3 +4,15 @@
 {
 	margin-bottom: 0 !important;
 }
+
+.sky-form fieldset.collapse {
+	display: none !important;
+}
+
+.sky-form fieldset.collapse.in {
+	display: block !important;
+}
+
+.counters span.counter-icon i {
+	font-size: 16px;
+}

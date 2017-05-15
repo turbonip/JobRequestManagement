@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.bangmodteam.workshop.utility.SecurityUtility;
+
 @Controller
 @Secured("ROLE_ADMIN")
 public class HomeController {
@@ -14,11 +16,16 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 
-		model.addAttribute("thymeleaf", "Test thymeleaf");
+		if (SecurityUtility.checkAuthorizeByRoleName("ROLE_STAFF")) {
 
-		// Customer cus = customerRepository.findByFirstName("ME");
+			return "redirect:ticket/list/O";
 
-		return "home";
+		} else {
+
+			return "redirect:job/";
+
+		}
+
 	}
 
 }

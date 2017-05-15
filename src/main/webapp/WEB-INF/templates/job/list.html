@@ -6,8 +6,11 @@
 <body>
 	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="JobListController as vm">
 		<form id="sky-form" class="sky-form" novalidate>
-			<header>Job Search</header>
-			<fieldset>
+			<header class="clearfix">
+			<a id="filter" class="pull-right" href="#" ng-click="vm.toggleFilter()" ><i class="icon-custom icon-sm icon-bg-orange icon-equalizer"></i></a>
+			Job Search
+			</header>
+			<fieldset id="filterContent" class="collapse">
 				<div class="row">
 					<section class="col col-6">
 						<label class="label">Job ID</label> <label class="input"><input type="text" id="jobId" name="jobId"></label>
@@ -25,12 +28,12 @@
 						<label class="label">Job Date</label>
 						<div class="row">
 							<section class="col col-6">
-								<label class="input"> <i class="icon-append fa fa-calendar"></i> <input type="text" id="start" placeholder="วันที่เริ่มต้น" />
-								</label> <input type="hidden" name="jobDateBegin" id="startAlt" />
+								<label class="input"> <i class="icon-append fa fa-calendar"></i> <input type="text" id="start" placeholder="วันที่เริ่มต้น" th:value="${filterStartDateDisplay}" readonly >
+								</label> <input type="hidden" name="jobDateBegin" id="startAlt" th:value="${filterStartDate}" />
 							</section>
 							<section class="col col-6">
-								<label class="input"> <i class="icon-append fa fa-calendar"></i> <input type="text" id="finish" placeholder="วันที่สิ้นสุด">
-								</label> <input type="hidden" name="jobDateEnd" id="finishAlt" />
+								<label class="input"> <i class="icon-append fa fa-calendar"></i> <input type="text" id="finish" placeholder="วันที่สิ้นสุด" th:value="${filterEndDateDisplay}" readonly >
+								</label> <input type="hidden" name="jobDateEnd" id="finishAlt" th:value="${filterEndDate}" />
 							</section>
 						</div>
 					</section>
@@ -45,20 +48,33 @@
 					</section>
 					<section class="col col-6">
 						<label class="label">Status</label> <label class="select"> <select id="jobStatus" name="jobStatus">
+								<!-- <option value="0">ไม่ระบุ</option> -->
 								<option th:each="item : ${jobStatusList}" th:value="${item.value}" th:text="${item}"></option>
 						</select><i></i>
 						</label>
 					</section>
 				</div>
+				<div class="row text-center">
+					<section class="col col-xs-12">
+						<button id="search" type="button" class="btn-u btn-u-blue" ng-click="vm.search()">
+							<i class="icon-eyeglasses"></i> Search
+						</button>
+						<button sec:authorize="hasRole('ROLE_MONITOR')" type="button" class="btn-u btn-u-green" ng-click="vm.create()">
+							<i class="icon-plus"></i> Create
+						</button>
+					</section>
+				</div>
 			</fieldset>
-			<footer class="text-center">
-				<button type="button" class="btn-u btn-u-blue" ng-click="vm.search()">
-					<i class="icon-eyeglasses"></i> Search
-				</button>
-				<button type="button" class="btn-u btn-u-green" ng-click="vm.create()">
-					<i class="icon-plus"></i> Create
-				</button>
-			</footer>
+			<!--/*-->
+			<!-- 			<footer class="text-center"> -->
+			<!-- 				<button type="button" class="btn-u btn-u-blue" ng-click="vm.search()"> -->
+			<!-- 					<i class="icon-eyeglasses"></i> Search -->
+			<!-- 				</button> -->
+			<!-- 				<button sec:authorize="hasRole('ROLE_MONITOR')" type="button" class="btn-u btn-u-green" ng-click="vm.create()"> -->
+			<!-- 					<i class="icon-plus"></i> Create -->
+			<!-- 				</button> -->
+			<!-- 			</footer> -->
+			<!--*/-->
 		</form>
 
 		<table id="searchResult" class="table table-bordered">
@@ -87,13 +103,19 @@
 					<td class="text-center">{{row.jobId}}</td>
 					<td class="text-center">{{row.jobDate}}</td>
 					<td class="text-center">{{row.jobLocationName}}</td>
-					<td>{{row.promblemCatName}}</td>
-					<td>{{row.jobDescription}}</td>
-					<td class="text-center">{{row.jobStatusName}}</td>
+					<td class="text-center">{{row.promblemCatName}}</td>
+					<td class="text-left">{{row.jobDescription}}</td>
+					<td class="text-center" ng-switch on="row.jobStatusName">
+						<span ng-switch-when="OPEN" class="label label-primary">{{row.jobStatusName}}</span>
+						<span ng-switch-when="PROCESS" class="label label-warning">{{row.jobStatusName}}</span>
+						<span ng-switch-when="CLOSE" class="label label-success">{{row.jobStatusName}}</span>
+						<span ng-switch-default class="label label-defualt" >{{row.jobStatusName}}</span>
+					</td>
 					<td class="text-center"><a style="cursor: pointer;" ng-click="vm.view(row.jobId)">view</a></td>
 				</tr>
 			</tbody>
 		</table>
+
 	</div>
 
 	<th:block layout:fragment="footerScript">

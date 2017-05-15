@@ -23,9 +23,13 @@ public class User extends BaseEntity {
 	private String username;
 	private String password;
 
-	//private String firstName;
-	//private String lastName;
-	//private String name;
+	private String firstName;
+	private String lastName;
+	
+	public String getName() {
+		
+		return this.firstName + " " + this.lastName;
+	}
 	
 	@Transient
 	private String passwordConfirm;

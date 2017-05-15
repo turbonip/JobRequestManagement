@@ -10,7 +10,7 @@
 			<fieldset>
 				<div class="row">
 					<section class="col col-2 col-md-offset-10">
-						<label class="label">Job ID</label> <label class="input"><input type="text" class="text-center" th:value="*{jobId}" readonly></label>
+						<label class="label">Job ID</label> <label class="input"><input type="text" id="jobId" name="jobId" class="text-center" th:value="*{jobId}" readonly></label>
 					</section>
 				</div>
 				<div class="row">
@@ -60,7 +60,7 @@
 				</div>
 				<div class="row">
 					<section class="col col-sm-12">
-						<label class="label">Resolve</label> <label class="textarea textarea-resizable"> <textarea rows="3" th:text="*{jobResolve}" ng-readonly="!jobCloseSelected"></textarea>
+						<label class="label">Resolve</label> <label class="textarea textarea-resizable"> <textarea rows="3" id="jobResolve" name="jobResolve" th:text="*{jobResolve}" ng-readonly="!jobCloseSelected"></textarea>
 						</label>
 					</section>
 				</div>
@@ -74,7 +74,7 @@
 						<div id="collapse-Tickets" class="panel-collapse collapse in">
 							<div class="panel-body">
 								<div class="text-right" style="margin-bottom: 5px;" sec:authorize="hasRole('ROLE_LEADER')">
-									<button class="btn btn-success btn-sm" th:ng-click="|vm.createTicket(*{jobId})|">
+									<button sec:authorize="hasRole('ROLE_LEADER')" class="btn btn-success btn-sm" th:ng-click="|vm.openCreateTicket(*{jobId})|" th:style="*{#strings.equalsIgnoreCase('C', jobStatus.value)}? 'display:none':_ ">
 										<i class="icon-plus"></i>&nbsp;Create Ticket
 									</button>
 								</div>
@@ -89,7 +89,7 @@
 											<th>Assign To</th>
 											<th>Take Date</th>
 											<th>Finish Date</th>
-											<th>Resolve</th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -103,13 +103,13 @@
 										<tr th:unless="*{#lists.isEmpty(tickets)}" th:each="row,iterStat : *{tickets}">
 											<td th:text="${iterStat.index} + 1"></td>
 											<td>[[${row.ticketId}]]</td>
-											<td>[[${row.ticketStatus}]]</td>
+											<td><span th:class="|badge badge-${row.ticketStatusValue == 'O'? 'blue' : row.ticketStatusValue == 'P'? 'yellow' : row.ticketStatusValue == 'F'? 'aqua' :row.ticketStatusValue == 'C'? 'green' : 'default'} rounded|">[[${row.ticketStatus}]]</span></td>
 											<td>[[${row.assignAt}]]</td>
 											<td>[[${row.assignBy}]]</td>
 											<td>[[${row.assignTo}]]</td>
 											<td>[[${row.takeAt}]]</td>
 											<td>[[${row.finishAt}]]</td>
-											<td>[[${row.ticketResovle}]]</td>
+											<td class="text-center"><a style="cursor: pointer;" th:ng-click="|vm.viewTicket(${row.ticketId})|">view</a></td>
 										</tr>
 									</tbody>
 								</table>
@@ -123,6 +123,47 @@
 				<button type="button" class="btn-u btn-u-orange" ng-click="vm.close()">Close</button>
 			</footer>
 		</form>
+				
+		<div class="modal fade" id="creatTicketModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="row">
+						<form id="sky-form" class="sky-form" novalidate>
+							<header>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								สร้างใบงานย่อย
+							</header>
+							<fieldset>
+								<div class="row">
+									<section class="col col-6">
+										<label class="label">Assign To</label> <label class="select"> <select id="assignTo" name="assignTo">
+												<option value="0">กรุณาเลือก</option>
+												<option th:each="item : ${userList}" th:value="${item.userId}">[[${item.name}]]</option>
+												<optgroup label="พนักงานตำแหน่งอื่น" th:unless="${#lists.isEmpty(userOtherList)}">
+													<option th:each="item : ${userOtherList}" th:value="${item.userId}">[[${item.name}]]</option>
+												</optgroup>
+										</select><i></i>
+										</label>
+									</section>
+								</div>
+								<div class="row">
+									<section class="col col-sm-12">
+										<label class="label">Remark</label> <label class="textarea textarea-resizable"> <textarea rows="3" id="assignRemark" name="assignRemark"></textarea>
+										</label>
+									</section>
+								</div>
+							</fieldset>
+							<footer class="text-right">
+								<button type="button" class="btn-u btn-u-green" ng-click="vm.createTicket()">Create</button>
+								<button type="button" class="btn-u btn-u-default" data-dismiss="modal" aria-label="Close">Close</button>
+							</footer>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 

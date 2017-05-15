@@ -6,12 +6,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +25,11 @@ import com.bangmodteam.workshop.dto.JobAppFormDTO;
 import com.bangmodteam.workshop.dto.JobDetailDTO;
 import com.bangmodteam.workshop.dto.JobSearchDTO;
 import com.bangmodteam.workshop.dto.JobSearchResultDTO;
+import com.bangmodteam.workshop.dto.UserDetailDTO;
 import com.bangmodteam.workshop.entity.JobApp;
+import com.bangmodteam.workshop.entity.LocationInfo;
+import com.bangmodteam.workshop.entity.ProblemCategory;
+import com.bangmodteam.workshop.entity.User;
 import com.bangmodteam.workshop.repository.DeviceInfoRepository;
 import com.bangmodteam.workshop.repository.JobAppRepository;
 import com.bangmodteam.workshop.repository.LocationInfoRepositoty;
@@ -31,17 +37,19 @@ import com.bangmodteam.workshop.repository.ProblemCategoryRepository;
 import com.bangmodteam.workshop.repository.ProductLineInfoRepository;
 import com.bangmodteam.workshop.repository.TicketRepository;
 import com.bangmodteam.workshop.repository.UserRepository;
+import com.bangmodteam.workshop.utility.DateTimeUtility;
 import com.bangmodteam.workshop.utility.JobStatusDbConverter;
 import com.bangmodteam.workshop.utility.SecurityUtility;
 
 @Controller()
 @RequestMapping("job")
+@Secured({ "ROLE_USER" })
 public class JobController {
 
 	@Autowired
 	private JobAppRepository jobRepository;
-	@Autowired
-	private TicketRepository ticketRepository;
+	// @Autowired
+	// private TicketRepository ticketRepository;
 	@Autowired
 	private ProblemCategoryRepository problemRepository;
 	@Autowired
@@ -56,13 +64,42 @@ public class JobController {
 	@RequestMapping({ "/", "list" })
 	public String index(Model model) {
 
+		User user = userRepository.findByUsername(SecurityUtility.getCurrentUserName());
+
+		Calendar calenFirstMonth = Calendar.getInstance(Locale.US);
+		Calendar calenLastMonth = Calendar.getInstance(Locale.US);
+
+		calenFirstMonth.set(calenFirstMonth.get(Calendar.YEAR), calenFirstMonth.get(Calendar.MONTH), 1);
+		calenLastMonth.set(calenLastMonth.get(Calendar.YEAR), calenLastMonth.get(Calendar.MONTH) + 1, 0);
+		
+		Iterable<LocationInfo> locationList = null;
+
+		if (SecurityUtility.checkAuthorizeByRoleName("ROLE_LEADER")) {
+
+			locationList = locationRepository.findByGroupInfoLeaderId(user.getId());
+
+		} else if (SecurityUtility.checkAuthorizeByRoleName("ROLE_STAFF")) {
+
+			locationList = locationRepository.findByGroupInfoId(user.getGroupInfo().getId());
+
+		} else {
+
+			locationList = locationRepository.findAll();
+
+		}
+
 		model.addAttribute("problemList", problemRepository.findAll());
-		model.addAttribute("locationList", locationRepository.findAll());
+		model.addAttribute("locationList", locationList);
 
 		List<JobStatus> jobStatusList = new ArrayList<>(Arrays.asList(JobStatus.values()));
 		jobStatusList.removeIf(e -> e.getValue().equalsIgnoreCase("U"));
 		model.addAttribute("jobStatusList", jobStatusList);
 
+		model.addAttribute("filterStartDate", DateTimeUtility.DateToString(calenFirstMonth.getTime()));
+		model.addAttribute("filterEndDate", DateTimeUtility.DateToString(calenLastMonth.getTime()));
+		model.addAttribute("filterStartDateDisplay", DateTimeUtility.DateToString(calenFirstMonth.getTime(), "dd/MM/yyyy"));
+		model.addAttribute("filterEndDateDisplay", DateTimeUtility.DateToString(calenLastMonth.getTime(), "dd/MM/yyyy"));
+		
 		return "job/list";
 	}
 
@@ -74,12 +111,21 @@ public class JobController {
 		if (search != null) {
 
 			JobStatus jobStatus = new JobStatusDbConverter().convertToEntityAttribute(search.getJobStatus());
-
-			// TODO: Can not search by JobStatus
-			jobRepository.findBysCriteria(search.getJobId(), search.getProblemCat(), search.getJobLocation(), jobStatus // ,
-																														// search.getJobDateBegin(),
-																														// search.getJobDateEnd()
-			).forEach(entity -> results.add(new JobSearchResultDTO(entity)));
+			
+			if((jobStatus != JobStatus.UNDIFIEND)){
+				
+				jobRepository.findBysCriteriaWithStatus(search.getJobId(), search.getProblemCat(), search.getJobLocation() 
+													 	//,search.getJobDateBegin(), search.getJobDateEnd()
+													 	, jobStatus
+							).forEach(entity -> results.add(new JobSearchResultDTO(entity)));
+				
+			}
+			else
+			{
+				jobRepository.findBysCriteria(search.getJobId(), search.getProblemCat(), search.getJobLocation() 
+											 ,search.getJobDateBegin(), search.getJobDateEnd()
+							).forEach(entity -> results.add(new JobSearchResultDTO(entity)));
+			}
 
 			if (results.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -97,10 +143,37 @@ public class JobController {
 
 	@RequestMapping("/view/{jobId}")
 	public String view(@PathVariable Long jobId, Model model) {
-
-		JobDetailDTO dataDto = new JobDetailDTO(jobRepository.findOne(jobId), true);
+		
+		JobApp job = jobRepository.findOne(jobId);
+		JobDetailDTO dataDto = new JobDetailDTO(job, true);
 		model.addAttribute("dataDTO", dataDto);
 
+		//User Assigned//
+		List<UserDetailDTO> userOtherList = new ArrayList<>();
+		List<UserDetailDTO> userList = new ArrayList<>();
+		
+		if(SecurityUtility.checkAuthorizeByRoleName("ROLE_LEADER")) {
+			
+			User leader = userRepository.findByUsername(SecurityUtility.getCurrentUserName());
+			
+			List<User> userEntities = userRepository.findByUnderLeaderAndLocationsAndPosition(leader.getId(), job.getLocationInfo().getId(), job.getProblemCategory().getPositionResponse().getId());
+	
+			if (userEntities != null) {
+				userEntities.forEach(e -> userList.add(new UserDetailDTO(e)));
+			}
+	
+			List<User> userOtherEntities = userRepository.findByUnderLeaderAndLocationsAndNotPosition(leader.getId(), job.getLocationInfo().getId(), job.getProblemCategory().getPositionResponse().getId());
+	
+			if (userOtherEntities != null) {
+				userOtherEntities.forEach(e -> userOtherList.add(new UserDetailDTO(e)));
+			}
+			
+		}
+		
+		model.addAttribute("userList", userList);
+		model.addAttribute("userOtherList", userOtherList);
+		//--end User Assigned--//
+		
 		return "job/view";
 	}
 

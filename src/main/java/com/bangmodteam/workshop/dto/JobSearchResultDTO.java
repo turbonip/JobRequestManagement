@@ -3,6 +3,7 @@ package com.bangmodteam.workshop.dto;
 import java.text.SimpleDateFormat;
 
 import com.bangmodteam.workshop.entity.JobApp;
+import com.bangmodteam.workshop.utility.DateTimeUtility;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,15 +29,13 @@ public class JobSearchResultDTO {
 
 	public JobSearchResultDTO(JobApp jobapp) {
 
-		SimpleDateFormat sdfr = new SimpleDateFormat("dd/MM/yyyy");
-
 		if (jobapp != null) {
 
 			this.jobId = jobapp.getId();
 
 			this.promblemCatName = jobapp.getProblemCategory().getName();
 
-			this.jobDate = sdfr.format(jobapp.getOpenAt());
+			this.jobDate =  DateTimeUtility.DateToString(jobapp.getOpenAt(), "dd/MM/yyyy");
 
 			this.jobLocationName = jobapp.getLocationInfo().getName();
 

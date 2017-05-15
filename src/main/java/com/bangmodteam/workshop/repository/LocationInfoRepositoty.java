@@ -13,5 +13,7 @@ public interface LocationInfoRepositoty extends CrudRepository<LocationInfo, Lon
 
 	@Transactional(readOnly = true)
 	public List<LocationInfo> findByGroupInfoId(Long groupId);
+	
+	public List<LocationInfo> findByGroupInfoLeaderId(Long userId);
 
 }

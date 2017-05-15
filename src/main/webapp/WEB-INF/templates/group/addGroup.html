@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout/_layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div layout:fragment="content" class="col-md-9" ng-app="JobMngApp" ng-controller="JobDetailController as vm">
+		<form id="sky-form" class="sky-form">
+			<header>Job Detail</header>
+			<fieldset>
+				<div class="row">
+					<section class="col col-6">
+						<label class="label">Group Name</label> <label class="input"><input type="text"></label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-8">
+						<label class="label">Leader</label> <label class="select"> <select id="leader" name="leader">
+								<option value="0">กรุณาเลือก</option>
+								<option th:each="item : ${leaderList}" th:value="${item.userId}">[[${item.username}]]</option>
+						</select><i></i>
+						</label>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-8">
+						<label class="label">Location</label> <label class="select"> <select id="location" name="location">
+								<option value="0">กรุณาเลือก</option>
+								<option th:each="item : ${locationList}" th:value="${item.locationId}">[[${item.locationName}]]</option>
+						</select><i></i>
+						<a ng-click="vm.addLocation()"><i class="icon-plus"></i></a>
+						</label>
+					</section>
+					<section class="col col-10">
+						<div ng-repeat="row in vm.locations">
+							<a ng-click="vm.delLocation()"><i class="icon-minus"></i></a>&nbsp;{{row.locationName}}
+						</div>
+					</section>
+				</div>
+				<div class="row">
+					<section class="col col-8">
+						<label class="label">Members</label> <label class="select"> <select id="member" name="member">
+								<option value="0">กรุณาเลือก</option>
+								<option th:each="item : ${memberList}" th:value="${item.userId}">[[${item.userName}]]</option>
+						</select><i></i>
+						<a ng-click="vm.addMember()"><i class="icon-plus"></i></a>
+						</label>
+					</section>
+					<section class="col col-10">
+						<div ng-repeat="row in vm.members">
+							<a ng-click="vm.delMember()"><i class="icon-minus"></i></a>&nbsp;{{row.userName}}
+						</div>
+					</section>
+				</div>
+			</fieldset>
+			<footer class="text-right">
+				<button type="button" class="btn-u btn-u-green" ng-click="vm.create()">Create</button>
+				<button type="button" class="btn-u btn-u-orange" ng-click="vm.close()">Close</button>
+			</footer>
+		</form>
+	</div>
+	<th:block layout:fragment="footerScript">
+		<script type="text/javascript" th:src="@{/app/components/job/job.detail.controller.js}"></script>
+	</th:block>
+
+</body>
+</html>
